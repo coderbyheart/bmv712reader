@@ -1,0 +1,8 @@
+&uart1 {
+	status = "okay";
+	current-speed = <19200>;
+	tx-pin = <1>;
+	rx-pin = <0>;
+	rts-pin = <0xFFFFFFFF>;
+	cts-pin = <0xFFFFFFFF>;
+};

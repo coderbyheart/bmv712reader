@@ -1,0 +1,20 @@
+#
+# Copyright (c) 2018 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-BSD-5-Clause-Nordic
+#
+
+menu "BMV-712 reader"
+
+config APP_VERSION
+	string "The application version"
+	default "0.0.0-development"
+
+endmenu # BMV-712 reader
+
+menu "Zephyr Kernel"
+source "$ZEPHYR_BASE/Kconfig.zephyr"
+endmenu
+
+module = bmv712reader
+module-str = BMV-712 reader
