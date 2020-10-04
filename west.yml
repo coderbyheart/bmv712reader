@@ -6,7 +6,7 @@ manifest:
     - name: sdk-nrf
       path: nrf
       remote: nordic
-      revision: AWS_IOT_EVT_READY-after-subscribe
+      revision: master
       import: true
   self:
     path: zephyr-bmv712reader
