@@ -2,6 +2,7 @@
 #include <drivers/uart.h>
 #include <stdio.h>
 #include <string.h>
+#include <dk_buttons_and_leds.h>
 
 static uint8_t uart_buf[1024];
 static uint8_t bmv_buf[1024];
@@ -10,6 +11,19 @@ static uint8_t prop_value[1024];
 static size_t recv_off;
 static size_t bmv_off;
 
+static struct k_delayed_work leds_update_work;
+
+/* Interval in milliseconds between each time status LEDs are updated. */
+#define LEDS_UPDATE_INTERVAL K_MSEC(500)
+
+/**@brief Update LEDs state. */
+static void leds_update(struct k_work *work)
+{
+	static bool led_on;
+	led_on = !led_on;
+	dk_set_led(DK_LED1, led_on);
+	k_delayed_work_submit(&leds_update_work, LEDS_UPDATE_INTERVAL);
+}
 const struct uart_config uart_cfg = {
 	.baudrate = 19200,
 	.parity = UART_CFG_PARITY_NONE,
@@ -68,9 +82,23 @@ void uart_cb(struct device *x, void *user_data)
 	}
 }
 
+static void work_init(void)
+{
+	k_delayed_work_init(&leds_update_work, leds_update);
+	k_delayed_work_submit(&leds_update_work, LEDS_UPDATE_INTERVAL);
+}
+
 void main(void)
 {
 	printf("Hello World!\n");
+
+	int err = dk_leds_init();
+	if (err) {
+		printf("ledError, error: %d", err);
+		return;
+	}
+
+	work_init();
 
 	struct device *uart = device_get_binding("UART_1");
 	uart_configure(uart, &uart_cfg);
