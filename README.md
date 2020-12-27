@@ -2,6 +2,8 @@
 
 ## Connect BMV-712
 
+![ve.direct](./vedirect.png)
+
 - Pin 2 to Pin 14 on DK
 - Pin 3 to Pin 15 on DK
 
